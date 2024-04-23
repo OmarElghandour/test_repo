@@ -17,48 +17,48 @@ services:
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - app_network
-
+    depends_on:
+      - postgres
   # Nginx Service
   nginx:
     image: nginx:alpine
     container_name: ${APP_SLUG}_nginx
     restart: unless-stopped
     ports:
-      - "8888:80"
+      - "80:80"
     volumes:
       - ./:/var/www
       - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
       - app_network
 
-  # Mariadb Service
-  database:
-    image: mariadb:latest
-    container_name: ${APP_SLUG}_database
+  # postgres service
+  postgres:
+    image: postgres
+    container_name: ${APP_SLUG}_postgres
     restart: unless-stopped
     ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      SERVICE_TAGS: ${APP_ENV}
-      SERVICE_NAME: ${APP_SLUG}_database
+      - "5432:5432"
     volumes:
-      - ./storage-db:/var/lib/mysql/
-      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./docker/postgres/data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
     networks:
       - app_network
 
-  # Redis service
-  redis:
-    image: redis:latest
-    container_name: ${APP_SLUG}_redis
-    restart: unless-stopped
-    command: redis-server --requirepass ${REDIS_PASSWORD}
-    env_file:
-      - .env
+  angular:
+    image: node:latest
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: ["npm", "start"]
+    ports:
+      - "4200:4200"
+
     networks:
       - app_network
 

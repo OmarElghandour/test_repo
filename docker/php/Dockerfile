@@ -23,13 +23,19 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
-    nodejs
+    nodejs \
+    libpq-dev # Install libpq-dev for PostgreSQL development files
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install extensions
-RUN docker-php-ext-install pdo pdo_mysql
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql pdo_pgsql # Install PDO MySQL and PDO PostgreSQL extensions
+
+# Enable the pgsql extension by modifying php.ini
+RUN echo "extension=pgsql.so" >> /usr/local/etc/php/php.ini
+
+# Install npm packages
 RUN npm install -g -y yarn
 
 # Install composer
