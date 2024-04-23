@@ -55,7 +55,7 @@ services:
     working_dir: /app
     volumes:
       - ./frontend:/app
-    command: ["npm", "start"]
+    command: ["sh", "-c", "npm install && npm start"]  # Run npm install followed by npm start
     ports:
       - "4200:4200"
 
