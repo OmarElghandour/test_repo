@@ -1,0 +1,54 @@
+<div class="container mx-auto mt-16 p-40">
+  <form [formGroup]="heroForm" (ngSubmit)="onSubmit()" class="mt-8 p-8 bg-white shadow-md rounded-lg">
+    <div class="mb-8 border-b border-gray-300 pb-4">
+      <label for="name" class="block text-gray-700 font-bold mb-2">Real Name:</label>
+      <input type="text" class="form-input w-full" formControlName="name" placeholder="Enter real name...">
+    </div>
+    <div class="mb-8 border-b border-gray-300 pb-4">
+      <label for="heroName" class="block text-gray-700 font-bold mb-2">Hero Name:</label>
+      <input type="text" class="form-input w-full" formControlName="heroName" placeholder="Enter hero name...">
+    </div>
+    <div class="mb-8 border-b border-gray-300 pb-4">
+      <label for="publisher" class="block text-gray-700 font-bold mb-2">Publisher:</label>
+      <input type="text" class="form-input w-full" formControlName="publisher" placeholder="Enter publisher...">
+    </div>
+    <div class="mb-8 border-b border-gray-300 pb-4">
+      <label for="firstAppearanceDate" class="block text-gray-700 font-bold mb-2">First Appearance Date:</label>
+      <input type="date" class="form-input w-full" formControlName="firstAppearanceDate">
+    </div>
+
+    <div formArrayName="abilities" class="mb-8 border-b border-gray-300 pb-4">
+      <label for="abilities" class="block text-gray-700 font-bold mb-2">Abilities:</label>
+      <div *ngFor="let ability of getAbilities.controls; let i = index" class="flex items-center mb-2">
+        <input type="text" class="form-input w-2/3 mr-2" [formControlName]="i" placeholder="Enter ability...">
+        <button type="button" class="btn btn-red" (click)="removeAbility(i)">Remove</button>
+      </div>
+      <button type="button" class="btn btn-blue" (click)="addAbility()">Add Ability</button>
+    </div>
+
+    <div formArrayName="teamAffiliations" class="mb-8 border-b border-gray-300 pb-4">
+      <label for="teamAffiliations" class="block text-gray-700 font-bold mb-2">Team Affiliations:</label>
+      <div *ngFor="let affiliation of getTeamAffiliations.controls; let i = index" class="flex items-center mb-2">
+        <input type="text" class="form-input w-2/3 mr-2" [formControlName]="i" placeholder="Enter team affiliation...">
+        <button type="button" class="btn btn-red" (click)="removeTeamAffiliation(i)">Remove</button>
+      </div>
+      <button type="button" class="btn btn-blue" (click)="addTeamAffiliation()">Add Affiliation</button>
+    </div>
+
+    <div formArrayName="powers" class="mb-8 border-b border-gray-300 pb-4">
+      <label for="powers" class="block text-gray-700 font-bold mb-2">Powers:</label>
+      <div *ngFor="let power of getPowers.controls; let i = index" class="flex items-center mb-2">
+        <input type="text" class="form-input w-2/3 mr-2" [formControlName]="i" placeholder="Enter power...">
+        <button type="button" class="btn btn-red" (click)="removePower(i)">Remove</button>
+      </div>
+      <button type="button" class="btn btn-blue" (click)="addPower()">Add Power</button>
+    </div>
+
+    <button type="submit" class="btn btn-green mt-4 btn-blue">
+      {{ heroId === '_new_' ? 'Create' : 'Update'}} Hero
+    </button>
+
+
+  </form>
+</div>
+
