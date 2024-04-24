@@ -48,6 +48,10 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 # Copy existing application directory contents
 COPY . /var/www
 
+
+# Remove permissions from docker/postgres/data and all nested folders
+RUN chmod -R o-rwx /var/www/docker/postgres/data
+
 # Copy existing application directory permissions
 COPY --chown=www:www . /var/www
 
